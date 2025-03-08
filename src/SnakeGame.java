@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-//import java.util.Arrays;
 import java.util.Random;
 import javax.swing.*;
 
@@ -37,6 +36,7 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener{
     int velocityY;
     Timer gameLoop;
     boolean gameOver = false;
+    private JButton restartButton;
 
     SnakeGame(int boardWidth, int boardHeight){
         this.boardWidth = boardWidth;
@@ -59,6 +59,20 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener{
 
         gameLoop = new Timer(100,this);
         gameLoop.start();
+
+        // Initialize restart button
+        restartButton = new JButton("Restart Game");
+        restartButton.setBounds(boardWidth / 4, boardHeight / 2, 150, 50);
+        restartButton.setVisible(false);  // Hide the button initially
+        restartButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                restartGame();
+            }
+        });
+        this.setLayout(null);  // Set layout manager to null for custom positioning
+        this.add(restartButton);
+
     }
 
     public void paintComponent(Graphics g){
@@ -97,6 +111,8 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener{
         if(gameOver){
             g.setColor(Color.red);
             g.drawString("Game Over: " + String.valueOf(snakeBody.size()), tileSize - 16, tileSize);
+            restartButton.setVisible(true);  // Show the restart button when the game is over
+
         }else{
             g.drawString("Score :" + String.valueOf(snakeBody.size()), tileSize - 16, tileSize);
         }
@@ -186,4 +202,16 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener{
 
     @Override
     public void keyReleased(KeyEvent e) {}
+
+    public void restartGame(){
+        snakeHead = new Tile(5, 5); // Reset snake head position
+        snakeBody.clear(); // Clear the snake body
+        velocityX = 1; // Reset snake direction
+        velocityY = 0;
+        gameOver = false; // Set game over to false
+        placeFood(); // Place food
+        gameLoop.start(); // Start the game loop again
+        restartButton.setVisible(false); // Hide the restart button
+        repaint(); // Repaint the game panel
+    }
 }
