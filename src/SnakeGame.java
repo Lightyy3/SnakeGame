@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.*;
 
-
 public class SnakeGame extends JPanel implements ActionListener, KeyListener{
     //we want the snake to listen to key events  - KeyListener
 
@@ -92,6 +91,16 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener{
             // g.fillRect(snakePart.x*tileSize, snakePart.y*tileSize, tileSize, tileSize);
             g.fill3DRect(snakePart.x*tileSize, snakePart.y*tileSize, tileSize, tileSize, true);
         }
+
+        //Score
+        g.setFont(new Font("Arial", Font.PLAIN,16));
+        if(gameOver){
+            g.setColor(Color.red);
+            g.drawString("Game Over: " + String.valueOf(snakeBody.size()), tileSize - 16, tileSize);
+        }else{
+            g.drawString("Score :" + String.valueOf(snakeBody.size()), tileSize - 16, tileSize);
+        }
+
     }
 
     public void placeFood(){
